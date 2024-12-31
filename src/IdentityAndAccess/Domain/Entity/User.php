@@ -3,6 +3,7 @@
 namespace App\IdentityAndAccess\Domain\Entity;
 
 use App\IdentityAndAccess\Domain\Entity\Trait\DateTrait;
+use App\IdentityAndAccess\Domain\Entity\Trait\UserRolesTrait;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 class User
 {
     use DateTrait;
+    use UserRolesTrait;
 
     public readonly ?string $id;
     public ?self $owner = null;

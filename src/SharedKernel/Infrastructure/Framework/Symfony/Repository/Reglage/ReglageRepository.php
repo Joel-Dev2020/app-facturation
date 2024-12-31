@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\SharedKernel\Infrastructure\Framework\Symfony\Repository\Reglage;
 
-use App\Entity\Reglage\Reglage;
-use App\SharedKernel\Domain\Model\Repository\Reglage\ReglageRepositoryInterface;
+use App\SharedKernel\Domain\Entity\Reglage\Reglage;
+use App\SharedKernel\Domain\Repository\Reglage\ReglageRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;

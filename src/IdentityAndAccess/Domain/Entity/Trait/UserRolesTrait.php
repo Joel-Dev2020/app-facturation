@@ -1,9 +1,9 @@
 <?php
 
-namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Entity\Trait;
+namespace App\IdentityAndAccess\Domain\Entity\Trait;
 
 
-use App\IdentityAndAccess\Infrastructure\Framework\Symfony\Service\User\UserRolesService;
+use App\IdentityAndAccess\Domain\Service\User\UserRolesService;
 
 trait UserRolesTrait
 {
@@ -25,5 +25,15 @@ trait UserRolesTrait
     public function isUser(): bool
     {
         return UserRolesService::isUser($this->getRoles());
+    }
+
+    public function isStandard(): bool
+    {
+        return UserRolesService::isStandard($this->getRoles());
+    }
+
+    public function isPremium(): bool
+    {
+        return UserRolesService::isPremium($this->getRoles());
     }
 }

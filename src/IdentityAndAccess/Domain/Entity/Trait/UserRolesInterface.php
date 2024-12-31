@@ -1,6 +1,7 @@
 <?php
 
-namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Service\User;
+namespace App\IdentityAndAccess\Domain\Entity\Trait;
+
 
 interface UserRolesInterface
 {
@@ -25,15 +26,4 @@ interface UserRolesInterface
     public static function isStandard(array $roles): bool;
 
     public static function isPremium(array $roles): bool;
-
-    // Vérifications d'accès pour chaque permission
-    public static function canList(array $roles): bool;
-
-    public static function canCreate(array $roles): bool;
-
-    public static function canView(array $roles): bool;
-
-    public static function canEdit(array $roles): bool;
-
-    public static function canDelete(array $roles): bool;
 }

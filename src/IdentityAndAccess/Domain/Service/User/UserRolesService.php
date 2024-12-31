@@ -1,6 +1,8 @@
 <?php
 
-namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Service\User;
+namespace App\IdentityAndAccess\Domain\Service\User;
+
+use App\IdentityAndAccess\Domain\Entity\Trait\UserRolesInterface;
 
 class UserRolesService implements UserRolesInterface
 {

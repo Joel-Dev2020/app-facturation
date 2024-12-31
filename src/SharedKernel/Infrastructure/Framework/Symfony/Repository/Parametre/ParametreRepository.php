@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\SharedKernel\Infrastructure\Framework\Symfony\Repository\Parametre;
 
-use App\SharedKernel\Domain\Model\Repository\Parametre\ParametreRepositoryInterface;
+use App\SharedKernel\Domain\Repository\Parametre\ParametreRepositoryInterface;
 use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Parametre\Parametre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

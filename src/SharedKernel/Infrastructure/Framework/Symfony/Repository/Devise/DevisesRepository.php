@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\SharedKernel\Infrastructure\Framework\Symfony\Repository\Devise;
 
-use App\SharedKernel\Domain\Model\Repository\Devise\DeviseRepositoryInterface;
+use App\SharedKernel\Domain\Repository\Devise\DeviseRepositoryInterface;
 use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Devise\Devise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;

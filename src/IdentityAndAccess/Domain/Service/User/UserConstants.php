@@ -1,6 +1,6 @@
 <?php
 
-namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Service\User;
+namespace App\IdentityAndAccess\Domain\Service\User;
 
 class UserConstants
 {

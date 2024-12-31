@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Entity;
 
-use App\IdentityAndAccess\Infrastructure\Framework\Symfony\Entity\Trait\PermissionsTrait;
-use App\IdentityAndAccess\Infrastructure\Framework\Symfony\Entity\Trait\UserRolesTrait;
+use App\IdentityAndAccess\Domain\Entity\Trait\UserRolesTrait;
 use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Trait\DatesTrait;
 use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Trait\UidTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +23,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use UidTrait;
     use DatesTrait;
     use UserRolesTrait;
-    use PermissionsTrait;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $organization = null;

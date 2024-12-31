@@ -11,17 +11,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final readonly class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private function __construct(
-        public string     $id,
-        public string     $organization,
-        public string     $name,
-        public string     $phone,
-        private string    $email,
-        private string    $password,
-        private array     $roles,
-        public bool       $enabled,
-        public ?string    $address = null,
-        public ?self      $owner = null,
-        public Collection $users = new ArrayCollection(),
+        public string      $id,
+        public string      $organization,
+        public string      $name,
+        public string      $phone,
+        private string     $email,
+        private string     $password,
+        private array      $roles,
+        public bool        $enabled,
+        public bool        $isSuperAdmin,
+        public bool        $isAdmin,
+        public bool        $isUser,
+        public bool        $isStandard,
+        public bool        $isPremium,
+        public ?string     $address = null,
+        private ?self      $owner = null,
+        private Collection $users = new ArrayCollection(),
     )
     {
     }
@@ -29,17 +34,22 @@ final readonly class SecurityUser implements UserInterface, PasswordAuthenticate
     public static function create(User $user): self
     {
         return new self(
-            $user->id,
-            $user->getOrganization(),
-            $user->getName(),
-            $user->getPhoneNumber(),
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getRoles(),
-            $user->getIsEnabled(),
-            $user->getAddress(),
-            $user->getOwner(),
-            $user->getUsers(),
+            id: $user->id,
+            organization: $user->getOrganization(),
+            name: $user->getName(),
+            phone: $user->getPhoneNumber(),
+            email: $user->getEmail(),
+            password: $user->getPassword(),
+            roles: $user->getRoles(),
+            enabled: $user->getIsEnabled(),
+            isSuperAdmin: $user->isSuperAdmin(),
+            isAdmin: $user->isAdmin(),
+            isUser: $user->isUser(),
+            isStandard: $user->isStandard(),
+            isPremium: $user->isPremium(),
+            address: $user->getAddress(),
+            owner: $user->getOwner(),
+            users: $user->getUsers(),
         );
     }
 
