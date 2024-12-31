@@ -1,0 +1,10 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;height: 100vh;width: 100%;">
+        <h2 style="font-size: 30px;">Welcome to Clean Architecture</h2>
+        <a href="{{ path('app_admin') }}">Dashboard</a>
+    </div>
+{% endblock %}

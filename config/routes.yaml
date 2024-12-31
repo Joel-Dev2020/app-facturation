@@ -1,5 +1,14 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+  resource:
+    path: ../src/IdentityAndAccess/Presentation/Controller/
+    namespace: App\IdentityAndAccess\Presentation\Controller
+  type: attribute
+  prefix: '/identity'
+
+# Routes pour les contrôleurs du dossier SharedKernel
+shared_kernel:
+  resource:
+    path: ../src/SharedKernel/Presentation/Controller/
+    namespace: App\SharedKernel\Presentation\Controller
+  type: attribute
+  prefix: '/shared'
