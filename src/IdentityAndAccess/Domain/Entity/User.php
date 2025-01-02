@@ -2,9 +2,11 @@
 
 namespace App\IdentityAndAccess\Domain\Entity;
 
+use App\IdentityAndAccess\Domain\Entity\Feature\UserEventFeature;
 use App\IdentityAndAccess\Domain\Entity\Trait\DateTrait;
 use App\IdentityAndAccess\Domain\Entity\Trait\UserRolesTrait;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -12,31 +14,42 @@ class User
 {
     use DateTrait;
     use UserRolesTrait;
+    use UserEventFeature;
 
-    public readonly ?string $id;
+    public ?string $id;
     public ?self $owner = null;
     public Collection $users;
     private string $organization;
     private string $name;
     private string $email;
     private string $password;
+    private ?string $passwordResetToken;
+    private ?DateTimeInterface $passwordResetRequestedAt;
+    private ?DateTimeInterface $passwordResetExpiresAt;
     private ?string $phone_number;
     private ?string $address;
     private array $roles;
     private ?bool $is_enabled;
+    private ?bool $is_free;
+    private ?UserReglage $reglage;
 
     public function __construct(
-        string     $organization,
-        string     $name,
-        string     $email,
-        string     $password,
-        string     $phone_number = null,
-        string     $address = null,
-        bool       $is_enabled = false,
-        ?string    $id = null,
-        array      $roles = [],
-        ?self      $owner = null,
-        Collection $users = new ArrayCollection(),
+        string             $organization,
+        string             $name,
+        string             $email,
+        string             $password,
+        ?string            $passwordResetToken = null,
+        ?DateTimeInterface $passwordResetRequestedAt = null,
+        ?DateTimeInterface $passwordResetExpiresAt = null,
+        string             $phone_number = null,
+        string             $address = null,
+        bool               $is_enabled = false,
+        bool               $is_free = false,
+        ?string            $id = null,
+        array              $roles = [],
+        ?self              $owner = null,
+        ?UserReglage       $reglage = null,
+        Collection         $users = new ArrayCollection(),
     )
     {
         $this->id = $id;
@@ -44,12 +57,17 @@ class User
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
+        $this->passwordResetToken = $passwordResetToken;
+        $this->passwordResetRequestedAt = $passwordResetRequestedAt;
+        $this->passwordResetExpiresAt = $passwordResetExpiresAt;
         $this->phone_number = $phone_number;
         $this->address = $address;
         $this->roles = $roles;
         $this->is_enabled = $is_enabled;
+        $this->is_free = $is_free;
         $this->owner = $owner;
         $this->users = $users;
+        $this->reglage = $reglage;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
     }
@@ -98,6 +116,39 @@ class User
         return $this;
     }
 
+    public function getPasswordResetToken(): ?string
+    {
+        return $this->passwordResetToken;
+    }
+
+    public function setPasswordResetToken(?string $passwordResetToken): User
+    {
+        $this->passwordResetToken = $passwordResetToken;
+        return $this;
+    }
+
+    public function getPasswordResetRequestedAt(): ?DateTimeInterface
+    {
+        return $this->passwordResetRequestedAt;
+    }
+
+    public function setPasswordResetRequestedAt(?DateTimeInterface $passwordResetRequestedAt): User
+    {
+        $this->passwordResetRequestedAt = $passwordResetRequestedAt;
+        return $this;
+    }
+
+    public function getPasswordResetExpiresAt(): ?DateTimeInterface
+    {
+        return $this->passwordResetExpiresAt;
+    }
+
+    public function setPasswordResetExpiresAt(?DateTimeInterface $passwordResetExpiresAt): User
+    {
+        $this->passwordResetExpiresAt = $passwordResetExpiresAt;
+        return $this;
+    }
+
     public function getPhoneNumber(): ?string
     {
         return $this->phone_number;
@@ -128,6 +179,17 @@ class User
     public function setRoles(array $roles): User
     {
         $this->roles = $roles;
+        return $this;
+    }
+
+    public function getIsFree(): ?bool
+    {
+        return $this->is_free;
+    }
+
+    public function setIsFree(?bool $is_free): User
+    {
+        $this->is_free = $is_free;
         return $this;
     }
 
@@ -183,19 +245,24 @@ class User
         return $this;
     }
 
-    public function updateProfile(
-        ?string $organization = null,
-        ?string $name = null,
-        ?string $email = null,
-        ?string $phone_number = null,
-        ?string $address = null,
-    ): self
+    public function getReglage(): ?UserReglage
     {
-        $this->organization = $organization;
-        $this->name = $name;
-        $this->email = $email;
-        $this->phone_number = $phone_number;
-        $this->address = $address;
+        return $this->reglage;
+    }
+
+    public function setReglage(?UserReglage $reglage): User
+    {
+        $this->reglage = $reglage;
         return $this;
+    }
+
+    public function isPasswordResetTokenExpired(): bool
+    {
+        if (!$this->passwordResetRequestedAt) {
+            return true;
+        }
+        // Jeton valide pendant 24 heures, par exemple
+        $expirationDate = (clone $this->passwordResetRequestedAt)->modify('+24 hours');
+        return new DateTimeImmutable() > $expirationDate;
     }
 }

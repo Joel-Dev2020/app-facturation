@@ -1,0 +1,163 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xxl-4">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="user-profile-img">
+                        <img src="{{ asset('assets/images/pattern-bg.jpg') }}"
+                             class="profile-img profile-foreground-img rounded-top" style="height: 120px;"
+                             alt="{{ user.organization ?? user.name }}">
+                        <div class="overlay-content rounded-top">
+                            <div>
+                                <div class="user-nav p-3">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="dropdown">
+                                            <a class="text-muted dropdown-toggle font-size-16" href="#" role="button"
+                                               data-bs-toggle="dropdown" aria-haspopup="true">
+                                                <i class="bx bx-dots-vertical text-white font-size-20"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item"
+                                                   href="{{ path('admin.users.update', {'id': user.id}) }}">
+                                                    Modifier
+                                                </a>
+                                                {% if permission.canDelete(app.user) and app.user.id != user.id %}
+                                                    <a class="dropdown-item" data-bs-toggle="modal"
+                                                       data-bs-target=".delete-user-{{ user.id }}" href="javascript:">
+                                                        Supprimer
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end user-profile-img -->
+
+                    <div class="p-4 pt-0">
+                        <div class="mt-n5 position-relative text-center border-bottom pb-3">
+                            <img src="{{ asset('assets/images/avatar.png') }}"
+                                 alt="{{ user.organization ?? user.name }}"
+                                 class="avatar-xl rounded-circle img-thumbnail">
+
+                            <div class="mt-3">
+                                <h5 class="mb-1">{{ user.name ?? user.organization }}</h5>
+                                <p class="text-muted mb-0">
+                                    <i class="bx bxs-star text-warning font-size-14"></i>
+                                    <i class="bx bxs-star text-warning font-size-14"></i>
+                                    <i class="bx bxs-star text-warning font-size-14"></i>
+                                    <i class="bx bxs-star text-warning font-size-14"></i>
+                                    <i class="bx bxs-star-half text-warning font-size-14"></i>
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div class="table-responsive mt-3 border-bottom pb-3">
+                            <table class="table align-middle table-sm table-borderless table-centered mb-0">
+                                <tbody>
+                                {% if user.owner is not null %}
+                                    <tr>
+                                        <th class="fw-bold">Superviseur :</th>
+                                        <td class="text-muted">{{ user.owner.name }}</td>
+                                    </tr>
+                                {% endif %}
+                                <tr>
+                                    <th class="fw-bold">Nom :</th>
+                                    <td class="text-muted">{{ user.name }}</td>
+                                </tr>
+                                <!-- end tr -->
+                                <tr>
+                                    <th class="fw-bold">Entreprise :</th>
+                                    <td class="text-muted">{{ user.organization }}</td>
+                                </tr>
+                                <!-- end tr -->
+                                <tr>
+                                    <th class="fw-bold">Téléphone :</th>
+                                    <td class="text-muted">{{ user.phoneNumber ?? 'Non mentionné' }}</td>
+                                </tr>
+                                <!-- end tr -->
+                                <tr>
+                                    <th class="fw-bold">Email :</th>
+                                    <td class="text-muted">{{ user.email }}</td>
+                                </tr>
+                                <!-- end tr -->
+                                </tbody><!-- end tbody -->
+                            </table>
+                        </div>
+
+                        {% if app.user.isSuperAdmin or app.user.isAdmin %}
+                            {% if permission.canEdit(app.user) and app.user.id != user.id %}
+                                <div class="pt-2 text-center border-bottom pb-2">
+                                    <a href="javascript:" data-bs-toggle="modal"
+                                       data-bs-target=".change-user-password-{{ user.id }}"
+                                       class="btn btn-danger waves-effect waves-light btn-sm w-100">
+                                        Modifier le mot de passe <i class="bx bx-lock-open ms-1 align-middle"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            {% if permission.canEdit(app.user) and app.user.id != user.id %}
+                                {{ component('UserPasswordChangeModalFormComponent', {
+                                    'title': user.name,
+                                    'id': 'change-user-password-'~user.id,
+                                    'userId': app.user.id,
+                                    'isMe': false,
+                                    'urlPath': path('admin.users.change_password', {'id': user.id, 'isMe': false}),
+                                }) }}
+                            {% endif %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xxl-8">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills nav-justified" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#infos" role="tab">
+                                <span>Informations</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab content -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="infos" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="font-size-16 mb-3">Apropos</h5>
+                            <div class="mt-3">
+                                <p class="font-size-15 mb-1">Hi my name is Jennifer Bennett.</p>
+                                <p class="font-size-15">I'm the Co-founder and Head of Design at Company agency.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    {% if permission.canDelete(app.user) and app.user.id != user.id %}
+        {{ component('DeleteFormComponent', {
+            'confirmText': "Voulez vous supprimer cet utilisateur ?",
+            'label': "Supprimer l'utilisateur",
+            'classId': 'delete-user-'~user.id,
+            'id': user.id,
+            'urlPath': path('admin.users.delete', {'id': user.id}),
+        }) }}
+    {% endif %}
+{% endblock %}

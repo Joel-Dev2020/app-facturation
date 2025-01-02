@@ -1,0 +1,31 @@
+<div class="modal fade {{ classId }}" tabindex="-1" role="dialog" aria-labelledby="myExtraSmallModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myExtraSmallModalLabel">{{ confirmText }}</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <form method="post" action="{{ urlPath }}" onsubmit="return confirm('{{ confirmText }}');">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+                        <button type="submit" class="btn text-white btn-sm btn-rounded btn-danger w-100">
+                            <i class="bx bx-trash me-1"></i> {{ label }}
+                        </button>
+                    </form>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-light btn-sm btn-rounded me-1 w-100"
+                                data-bs-dismiss="modal">
+                            <i class="bx bx-x me-1"></i> Annuler
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>

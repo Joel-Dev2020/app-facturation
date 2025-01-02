@@ -40,7 +40,6 @@ class ManagerService implements ManagerInterface
                 $this->removeEntity($entity);
                 break;
         }
-
         $this->em->flush();
     }
 

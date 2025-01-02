@@ -1,0 +1,59 @@
+{% set reglage = reglages.findAll() %}
+{% set params = reglages.findParams() %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ reglage['app_title'] }} - {% block title %}{% endblock %}</title>
+    <meta name="subject" content="{{ reglage['app_title'] }}">
+    <meta name="author" content="{{ reglage['app_title'] }}">
+    {% if params.icon %}
+        <link rel="shortcut icon" href="{{ vich_uploader_asset(params, 'iconFile') }}"/>
+    {% else %}
+        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}"/>
+    {% endif %}
+
+    {{ component('StyleComponent') }}
+    {% block stylesheets %}{% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body>
+<div class="authentication-bg min-vh-100">
+    <div class="bg-overlay bg-light"></div>
+    <div class="container">
+        <div class="d-flex flex-column min-vh-100 px-3 pt-4">
+            <div class="row justify-content-center my-auto">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+
+                    <div class="mb-4 pb-2">
+                        <a href="{{ path('app_login') }}" class="d-block auth-logo">
+                            <img src="{{ asset('assets/images/logo-dark.png') }}" alt="{{ reglage['app_title'] }}"
+                                 height="30"
+                                 class="auth-logo-dark me-start">
+                        </a>
+                    </div>
+                    {{ component('FlashComponent') }}
+                    {% block security %}{% endblock %}
+
+                </div><!-- end col -->
+            </div><!-- end row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center p-4">
+                        <p>{{ component('CopyRightComponent') }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- end container -->
+</div>
+
+{{ component('ScriptComponent') }}
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% if status == 0 %}
+    <small class="badge bg-danger-subtle text-danger font-size-12">{{ statusValue }}</small>
+{% elseif status == 1 %}
+    <small class="badge bg-warning-subtle text-warning font-size-12">{{ statusValue }}</small>
+{% elseif status == 2 %}
+    <small class="badge bg-success-subtle text-success font-size-12">{{ statusValue }}</small>
+{% elseif status == 3 %}
+    <small class="badge bg-primary-subtle text-primary font-size-12">{{ statusValue }}</small>
+{% elseif status == 4 %}
+    <small class="badge bg-info-subtle text-info font-size-12">{{ statusValue }}</small>
+{% else %}
+    <small class="badge bg-dark-subtle text-dark font-size-12">{{ statusValue }}</small>
+{% endif %}

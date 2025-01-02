@@ -1,0 +1,40 @@
+{% extends 'identity_and_access/login/security.html.twig' %}
+
+{% block title %}Vérification d'email{% endblock %}
+
+{% block security %}
+    <div class="card">
+        <div class="card-body p-4">
+            <div class="p-2 my-2 text-center">
+                <div class="avatar-lg mx-auto">
+                    <div class="avatar-title rounded-circle bg-soft-success">
+                        <i class="bx bx-mail-send h2 mb-0 text-success"></i>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-1">
+                    <h4>Félicitation !</h4>
+                    <p class="text-muted">
+                        Si un compte correspondant à votre adresse e-mail existe, un e-mail contenant un lien que vous
+                        pouvez utiliser pour réinitialiser votre mot de passe. Ce lien expirera
+                        le {{ component('DateComponent', {
+                            'date': resetToken.passwordResetExpiresAt,
+                            'format': 'short',
+                            'formatTime': 'short',
+                        }) }}.
+                    </p>
+                    <p class="text-muted">
+                        Si vous ne recevez pas d'e-mail, veuillez vérifier votre dossier spam ou
+                        <a href="{{ path('password.request') }}">Réessayez</a>.
+                    </p>
+
+                    <div class="mt-4">
+                        <a href="{{ path('app_login') }}" class="btn btn-primary w-100">
+                            Retournez à la page de connexion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

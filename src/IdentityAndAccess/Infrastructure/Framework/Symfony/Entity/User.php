@@ -7,6 +7,7 @@ namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Entity;
 use App\IdentityAndAccess\Domain\Entity\Trait\UserRolesTrait;
 use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Trait\DatesTrait;
 use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Trait\UidTrait;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,11 +43,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $password = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $passwordResetToken = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $passwordResetRequestedAt = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $passwordResetExpiresAt = null;
 
     #[ORM\Column(type: 'boolean', nullable: true, options: ["default" => false])]
     private ?bool $enabled = false;
+
+    #[ORM\Column(type: 'boolean', nullable: true, options: ["default" => false])]
+    private ?bool $is_free = false;
+
+    #[ORM\OneToOne(targetEntity: UserReglage::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?UserReglage $reglage = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'users')]
     private ?self $owner = null;
@@ -145,6 +161,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getPasswordResetToken(): ?string
+    {
+        return $this->passwordResetToken;
+    }
+
+    public function setPasswordResetToken(?string $passwordResetToken): User
+    {
+        $this->passwordResetToken = $passwordResetToken;
+        return $this;
+    }
+
+    public function getPasswordResetRequestedAt(): ?DateTimeInterface
+    {
+        return $this->passwordResetRequestedAt;
+    }
+
+    public function setPasswordResetRequestedAt(?DateTimeInterface $passwordResetRequestedAt): User
+    {
+        $this->passwordResetRequestedAt = $passwordResetRequestedAt;
+        return $this;
+    }
+
+    public function getPasswordResetExpiresAt(): ?DateTimeInterface
+    {
+        return $this->passwordResetExpiresAt;
+    }
+
+    public function setPasswordResetExpiresAt(?DateTimeInterface $passwordResetExpiresAt): User
+    {
+        $this->passwordResetExpiresAt = $passwordResetExpiresAt;
+        return $this;
+    }
+
+    public function getIsFree(): ?bool
+    {
+        return $this->is_free;
+    }
+
+    public function setIsFree(?bool $is_free): User
+    {
+        $this->is_free = $is_free;
+        return $this;
+    }
+
     public function getEnabled(): ?bool
     {
         return $this->enabled;
@@ -175,11 +235,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string)$this->email;
-    }
-
-    public function getFullname(): string
-    {
-        return $this->name;
     }
 
     /**
@@ -221,6 +276,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->owner = $owner;
 
+        return $this;
+    }
+
+    public function getReglage(): ?UserReglage
+    {
+        return $this->reglage;
+    }
+
+    public function setReglage(?UserReglage $reglage): self
+    {
+        if ($reglage && $reglage->getUser() !== $this) {
+            $reglage->setUser($this);
+        }
+        $this->reglage = $reglage;
         return $this;
     }
 }

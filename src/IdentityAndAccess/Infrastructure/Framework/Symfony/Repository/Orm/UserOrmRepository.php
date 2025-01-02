@@ -3,15 +3,17 @@
 namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Repository\Orm;
 
 
-use App\IdentityAndAccess\Application\UseCase\Query\GetUserListQuery;
+use App\IdentityAndAccess\Application\UseCase\User\Query\GetUserListQuery;
 use App\IdentityAndAccess\Domain\Entity\User as DomainUser;
 use App\IdentityAndAccess\Domain\Repository\UserRepositoryInterface;
 use App\IdentityAndAccess\Infrastructure\Framework\Symfony\Entity\User as DoctrineUser;
+use App\IdentityAndAccess\Infrastructure\Mapper\UserMapper;
 use App\IdentityAndAccess\Presentation\Service\Manager\ManagerInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -63,76 +65,65 @@ class UserOrmRepository extends ServiceEntityRepository implements UserRepositor
                 return null;
             }
 
-            return $this->setUserToDomain($result);
+            return UserMapper::toDomain($result);
         } catch (NonUniqueResultException) {
             return null;
         }
     }
 
-    private function setUserToDomain(DoctrineUser $result): DomainUser
+    public function add(DomainUser $user): ?DomainUser
     {
-        return new DomainUser(
-            organization: $result->getOrganization(),
-            name: $result->getName(),
-            email: $result->getEmail(),
-            password: $result->getPassword(),
-            phone_number: $result->getPhone(),
-            address: $result->getAddress(),
-            is_enabled: $result->getEnabled(),
-            id: $result->getId(),
-            roles: $result->getRoles(),
-        );
-    }
-
-    public function add(DomainUser $user): void
-    {
-        $doctrineUser = $this->setDomainToUser($user);
+        $doctrineUser = UserMapper::toInfrastructure($user);
         $this->manager->setEntity($doctrineUser, "new");
+        return $doctrineUser->getId() ? UserMapper::toDomain($doctrineUser) : null;
     }
 
-    private function setDomainToUser(DomainUser $result): DoctrineUser
+    /**
+     * @throws Exception
+     */
+    public function update(DomainUser $user): ?DomainUser
     {
-        return (new DoctrineUser())
-            ->setOrganization($result->getOrganization())
-            ->setName($result->getName())
-            ->setEmail($result->getEmail())
-            ->setPhone($result->getPhoneNumber())
-            ->setAddress($result->getAddress())
-            ->setPassword($result->getPassword())
-            ->setEnabled($result->getIsEnabled())
-            ->setRoles($result->getRoles());
+        // Récupérez l'entité Doctrine existante
+        $doctrineUser = $this->getEntityManager()->getRepository(DoctrineUser::class)->find($user->id);
+
+        if (!$doctrineUser) {
+            throw new Exception('Utilisateur non trouvé.');
+        }
+
+        // Mettez à jour l'entité Doctrine avec les données du domaine
+        $doctrineUser = UserMapper::toInfrastructure($user, $doctrineUser);
+
+        // Persist et flush
+        $this->manager->setEntity($doctrineUser, "edit");
+        return $doctrineUser->getId() ? UserMapper::toDomain($doctrineUser) : null;
     }
 
-    public function update(DomainUser $user): void
-    {
-        $this->manager->setEntity($this->setDomainToUser($user), "edit");
-    }
-
+    /**
+     * @throws Exception
+     */
     public function remove(DomainUser $user): void
     {
-        $this->manager->setEntity($this->setDomainToUser($user), "delete");
-    }
+        // Récupérez l'entité Doctrine existante
+        $doctrineUser = $this->getEntityManager()->getRepository(DoctrineUser::class)->find($user->id);
 
-    public function getByVerifyToken(string $token): ?DomainUser
-    {
-        /** @var DoctrineUser $result */
-        $result = $this->createQueryBuilder('u')
-            ->where('u.token = :token')
-            ->setParameter('token', $token)
-            ->getQuery()
-            ->getOneOrNullResult();
-        return $this->setUserToDomain($result);
+        if (!$doctrineUser) {
+            throw new Exception('Utilisateur non trouvé.');
+        }
+
+        // Mettez à jour l'entité Doctrine avec les données du domaine
+        $doctrineUser = UserMapper::toInfrastructure($user, $doctrineUser);
+        $this->manager->setEntity($doctrineUser, "delete");
     }
 
     public function getByResetToken(string $token): ?DomainUser
     {
         /** @var DoctrineUser $result */
         $result = $this->createQueryBuilder('u')
-            ->where('u.token = :token')
+            ->where('u.passwordResetToken = :token')
             ->setParameter('token', $token)
             ->getQuery()
             ->getOneOrNullResult();
-        return $this->setUserToDomain($result);
+        return $result !== null ? UserMapper::toDomain($result) : null;
     }
 
     /**
@@ -144,7 +135,7 @@ class UserOrmRepository extends ServiceEntityRepository implements UserRepositor
         $qb = $this->createQueryBuilder('u');
         if ($query->userId !== null && Uuid::isValid($query->userId)) {
             $domainUser = $this->getById($query->userId);
-            $user = $this->setDomainToUser($domainUser);
+            $user = UserMapper::toInfrastructure($domainUser);
             if ($user->isSuperAdmin()) {
                 $qb->andWhere('u.roles LIKE :roleAdmin')
                     ->setParameter('roleAdmin', '%ROLE_ADMIN%');
@@ -188,6 +179,6 @@ class UserOrmRepository extends ServiceEntityRepository implements UserRepositor
             ->setParameter('id', $id, UuidType::NAME)
             ->getQuery()
             ->getOneOrNullResult();
-        return $result !== null ? $this->setUserToDomain($result) : null;
+        return $result !== null ? UserMapper::toDomain($result) : null;
     }
 }

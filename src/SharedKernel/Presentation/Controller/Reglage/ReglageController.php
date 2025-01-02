@@ -2,8 +2,8 @@
 
 namespace App\SharedKernel\Presentation\Controller\Reglage;
 
-use App\IdentityAndAccess\Application\UseCase\Query\GetUserListQuery;
-use App\IdentityAndAccess\Application\UseCase\QueryHandler\GetUserListQueryHandler;
+use App\IdentityAndAccess\Application\UseCase\User\Query\GetUserListQuery;
+use App\IdentityAndAccess\Application\UseCase\User\QueryHandler\GetUserListQueryHandler;
 use App\IdentityAndAccess\Infrastructure\Framework\Symfony\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;

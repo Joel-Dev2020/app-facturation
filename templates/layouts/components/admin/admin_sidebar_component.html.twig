@@ -1,0 +1,16 @@
+{# User Sidebar section #}
+{{ component('UserSideBarComponent') }}
+
+{# Admin sidebar menus here... #}
+{% set disabledLink = 'disabled-link' %}
+{% if this.activeSub %}
+    {% set disabledLink = '' %}
+{% endif %}
+
+<li class="menu-title" data-key="t-users">Utilisateurs & Abonnements</li>
+<li>
+    <a href="{{ path('admin.users.index') }}" class="{{ disabledLink }}">
+        <i class="bx bx-user icon nav-icon"></i>
+        <span class="menu-item" data-key="t-users">Gestion utilisateurs</span>
+    </a>
+</li>

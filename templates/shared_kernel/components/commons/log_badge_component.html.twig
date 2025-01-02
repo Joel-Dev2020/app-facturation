@@ -1,0 +1,7 @@
+{% if notification.action == 'add' %}
+    <small class="badge bg-success-subtle text-success font-size-12">{{ notification.actionValue }}</small>
+{% elseif notification.action == 'edit' %}
+    <small class="badge bg-warning-subtle text-warning font-size-12">{{ notification.actionValue }}</small>
+{% else %}
+    <small class="badge bg-danger-subtle text-danger font-size-12">{{ notification.actionValue }}</small>
+{% endif %}

@@ -3,7 +3,7 @@ controllers:
     path: ../src/IdentityAndAccess/Presentation/Controller/
     namespace: App\IdentityAndAccess\Presentation\Controller
   type: attribute
-  prefix: '/identity'
+#  prefix: '/identity'
 
 # Routes pour les contrôleurs du dossier SharedKernel
 shared_kernel:
@@ -11,4 +11,4 @@ shared_kernel:
     path: ../src/SharedKernel/Presentation/Controller/
     namespace: App\SharedKernel\Presentation\Controller
   type: attribute
-  prefix: '/shared'
+#  prefix: '/shared'

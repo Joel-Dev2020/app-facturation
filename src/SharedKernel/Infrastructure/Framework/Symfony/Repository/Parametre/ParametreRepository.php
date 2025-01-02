@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\SharedKernel\Infrastructure\Framework\Symfony\Repository\Parametre;
 
+use App\SharedKernel\Domain\Entity\Parametre\Parametre as DomainParametre;
 use App\SharedKernel\Domain\Repository\Parametre\ParametreRepositoryInterface;
 use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Parametre\Parametre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @method Parametre|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,8 +24,26 @@ class ParametreRepository extends ServiceEntityRepository implements ParametreRe
         parent::__construct($registry, Parametre::class);
     }
 
-    public function findParam(string $id): ?Parametre
+    public function findParam(string $id): ?DomainParametre
     {
-        return $this->createQueryBuilder('p')->getQuery()->getOneOrNullResult();
+        $result = $this->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id, UuidType::NAME)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $this->setParametreToDomain($result);
+    }
+
+    private function setParametreToDomain(Parametre $result): DomainParametre
+    {
+        return new DomainParametre(
+            id: $result->getId(),
+            filename: $result->getFilename(),
+            filename2: $result->getFilename2(),
+            icon: $result->getIcon(),
+            imageFile: $result->getImageFile(),
+            imageFile2: $result->getImageFile2(),
+            iconFile: $result->getIconFile(),
+        );
     }
 }

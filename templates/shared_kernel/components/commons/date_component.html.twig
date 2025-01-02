@@ -1,0 +1,4 @@
+{% if this.date != null %}
+    {% if icon is not null %} <i class="{{ icon }}"></i> {% endif %}
+    {{ date|format_datetime(format, formatTime, locale = app.request.locale ) }}
+{% endif %}

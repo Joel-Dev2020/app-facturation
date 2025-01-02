@@ -1,0 +1,68 @@
+<div {{ attributes }}>
+    {% if reglage != null %}
+        <div class="modal fade modal-reglage-edit" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myExtraLargeModalLabel">Mes reglages</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% if isSuccessful %}
+                            {{ component('Alert', {
+                                'message': message,
+                                'type': 'success',
+                            }) }}
+                        {% endif %}
+                        {{ form_start(form, {
+                            attr: {
+                                novalidate: true,
+                                'class': 'row',
+                                'data-action': 'live#action:prevent',
+                                'data-live-action-param': 'save',
+                            }
+                        }) }}
+                        <div class="col-12">
+                            {{ form_row(form.tva) }}
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-6 col-xl-6">
+                            {{ form_row(form.email) }}
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-6 col-xl-6">
+                            {{ form_row(form.telephone) }}
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-6 col-xl-6">
+                            {{ form_row(form.prefixNumeroInvoice) }}
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-6 col-xl-6">
+                            {{ form_row(form.devises) }}
+                        </div>
+                        <div class="col-12">
+                            {{ form_row(form.address) }}
+                        </div>
+                        <div class="col-12">
+                            {{ form_row(form.isRemise) }}
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12 d-flex justify-content-between align-items-center">
+                                <button type="button" class="btn btn-light btn-sm btn-rounded me-1"
+                                        data-bs-dismiss="modal">
+                                    <i class="bx bx-x me-1"></i> Annuler
+                                </button>
+                                <button type="submit"
+                                        class="btn btn-success btn-sm btn-rounded {{ this.hasValidationErrors ? 'disabled' : '' }}">
+                                    <span data-loading="action(save)|show">
+                                        <twig:ux:icon name="uil:spinner" style="animation: spin 1s linear infinite;"/>
+                                    </span>
+                                    <i class="bx bx-pencil"></i> Sauvegarder
+                                </button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    {% endif %}
+</div>

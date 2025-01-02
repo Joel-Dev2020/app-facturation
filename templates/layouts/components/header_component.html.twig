@@ -1,0 +1,61 @@
+<header id="page-topbar" class="isvertical-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a href="{{ path('app_admin') }}" class="logo logo-dark">
+                    {{ component('LogoComponent', {'param': param, 'reglage': reglage}) }}
+                </a>
+            </div>
+
+            <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn">
+                <i class="bx bx-menu align-middle"></i>
+            </button>
+
+            <!-- start page title -->
+            <div class="page-title-box align-self-center d-none d-md-block">
+                <h4 class="page-title mb-0">Bonjour, {{ app.user.name }}</h4>
+                {# {% if app.user.admin %}
+                    {{ component('CheckUserSubscriptionComponent', {'user': app.user}) }}
+                {% endif %} #}
+            </div>
+            <!-- end page title -->
+        </div>
+
+        <div class="d-flex">
+            {% if app.user.isAdmin or app.user.isUser %}
+                {% set disabledLink = 'disabled-link' %}
+                {% if this.activeSub(app.user) %}
+                    {% set disabledLink = '' %}
+                {% endif %}
+                <div class="dropdown d-inline-block">
+                    <button type="button"
+                            class="btn header-item noti-icon {{ disabledLink }}"
+                            data-bs-toggle="modal"
+                            data-bs-target=".modal-main-search">
+                        <i class="bx bx-search icon-sm align-middle"></i>
+                    </button>
+                </div>
+            {% endif %}
+            {{ component('NotificationsComponent', {'user': app.user.isSuperAdmin ? null: app.user}) }}
+            {{ component('UserDropdownComponent') }}
+        </div>
+    </div>
+</header>
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <a href="{{ path('app_admin') }}" class="logo logo-dark">
+            {{ component('LogoComponent', {'param': param, 'reglage': reglage}) }}
+        </a>
+    </div>
+
+    <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn">
+        <i class="bx bx-menu align-middle"></i>
+    </button>
+
+    {{ component('SideBarComponent', {'param': param, 'reglage': reglage}) }}
+</div>
+<!-- Left Sidebar End -->

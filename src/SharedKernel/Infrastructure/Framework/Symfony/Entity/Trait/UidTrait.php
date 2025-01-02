@@ -11,7 +11,7 @@ trait UidTrait
     #[ORM\GeneratedValue('CUSTOM')]
     #[ORM\Column(type: UuidType::NAME, length: 255, unique: true)]
     #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
-    private ?string $id;
+    private ?string $id = null;
 
     public function getId(): ?string
     {

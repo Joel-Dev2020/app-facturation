@@ -3,7 +3,7 @@
 namespace App\SharedKernel\Domain\Repository\Parametre;
 
 
-use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Parametre\Parametre;
+use App\SharedKernel\Domain\Entity\Parametre\Parametre;
 
 interface ParametreRepositoryInterface
 {

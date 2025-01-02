@@ -1,17 +1,84 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+{% set reglage = reglages.findAll() %}
+{% set params = reglages.findParams() %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ reglage['app_title'] }} - {% block title %}{% endblock %}</title>
+    <meta name="subject" content="{{ reglage['app_title'] }}">
+    <meta name="author" content="{{ reglage['app_title'] }}">
+    {% if params is not null and params.icon %}
+        <link rel="shortcut icon" href="{{ vich_uploader_asset(params, 'iconFile') }}"/>
+    {% else %}
+        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}"/>
+    {% endif %}
+
+    {{ component('StyleComponent') }}
+    {% block stylesheets %}{% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    {{ component('HeaderComponent', {'param': params,'reglage': reglage}) }}
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                {{ component('FlashComponent') }}
+                {% block body %}{% endblock %}
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {{ component('FooterComponent', {'param': params, 'reglage': reglage}) }}
+    </div>
+    <!-- end main content-->
+
+</div>
+<!-- END layout-wrapper -->
+
+{% if app.user is not null %}
+    <twig:UserProfileModalFormComponent userId="{{ app.user.id }}"/>
+    {% if app.user.reglage != null and app.user.admin %}
+        {{ component('UserReglageModalFormComponent', {'reglage': app.user.reglage}) }}
+    {% endif %}
+    {% if permission.canList(app.user) or permission.canView(app.user) %}
+        {# {{ component('InvoicesExportComponent', {
+            'title': 'Exportation des factures',
+            'user': app.user,
+            'id': 'modal-invoices-export',
+            'urlPath': path('modules.invoices.exports.index'),
+        }) }} #}
+        {{ component('UserPasswordChangeModalFormComponent', {
+            'title': app.user.name,
+            'id': 'change-my-password-'~app.user.id,
+            'userId': app.user.id,
+            'isMe': true,
+            'urlPath': path('admin.users.change_password', {'id': app.user.id, 'isMe': true}),
+        }) }}
+        {# {% if app.user.admin or app.user.user %}
+            {{ component('MainSearchComponent', {'user': app.user.superAdmin ? null: app.user}) }}
+        {% endif %} #}
+    {% endif %}
+    {# {% if userPermission.canEdit(app.user) %}
+        {{ component('MaintenancesModalFormComponent') }}
+        {{ component('ParametresModalFormComponent', {'parametre': params}) }}
+    {% endif %} #}
+    {{ component('LogoutComponent', {'title': reglage['app_title']}) }}
+{% endif %}
+
+{{ component('ScriptComponent') }}
+
+</body>
 </html>

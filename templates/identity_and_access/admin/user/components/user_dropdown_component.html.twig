@@ -1,0 +1,67 @@
+<div class="dropdown d-inline-block">
+    <button type="button" class="btn header-item user text-start d-flex align-items-center"
+            id="page-header-user-dropdown-v"
+            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ component('PhotoProfileComponent', {'user': app.user }) }}
+    </button>
+    <div class="dropdown-menu dropdown-menu-end pt-0">
+        <div class="p-3 border-bottom">
+            <h6 class="mb-0">{{ app.user.name }}</h6>
+            <p class="mb-0 font-size-11 text-muted">{{ app.user.email }}</p>
+        </div>
+
+        {% if app.user != null %}
+            <a class="dropdown-item" href="javascript:" data-bs-toggle="modal"
+               data-bs-target=".modal-profile-edit">
+                <i class="mdi mdi-account-circle text-muted font-size-16 align-middle me-2"></i>
+                <span class="align-middle">Mon profil</span>
+            </a>
+        {% endif %}
+        {% if app.user.reglage != null and app.user.isAdmin %}
+            <a class="dropdown-item" href="javascript:" data-bs-toggle="modal"
+               data-bs-target=".modal-reglage-edit">
+                <i class="mdi mdi-cogs text-muted font-size-16 align-middle me-2"></i>
+                <span class="align-middle">Mes reglages</span>
+            </a>
+        {% endif %}
+        {% if app.user.isSuperAdmin %}
+            <a class="dropdown-item" href="javascript:">
+                <i class="mdi mdi-stack-exchange text-muted font-size-16 align-middle me-2"></i>
+                <span class="align-middle">Gestion des devises</span>
+            </a>
+        {% endif %}
+
+        <a class="dropdown-item" href="javascript:" data-bs-toggle="modal"
+           data-bs-target=".change-my-password-{{ app.user.id }}">
+            <i class="mdi mdi-account-circle text-muted font-size-16 align-middle me-2"></i>
+            <span class="align-middle">Changer mot de passe</span>
+        </a>
+
+        {% if app.user.isSuperAdmin %}
+            <a class="dropdown-item d-flex align-items-center" href="javascript:">
+                <i class="mdi mdi-cog-outline text-muted font-size-16 align-middle me-2"></i>
+                <span class="align-middle me-3">reglages</span>
+            </a>
+            <a class="dropdown-item" href="javascript:" data-bs-toggle="modal"
+               data-bs-target=".modal-parametre-edit">
+                <i class="mdi mdi-lock text-muted font-size-16 align-middle me-2"></i>
+                <span class="align-middle">Parametres</span>
+            </a>
+        {% endif %}
+
+        <a class="dropdown-item" href="javascript:">
+            <i class="mdi mdi-lifebuoy text-muted font-size-16 align-middle me-2"></i>
+            <span class="align-middle">Aides</span>
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        {% if app.user != null %}
+            <a class="dropdown-item" href="javascript:" data-bs-toggle="modal"
+               data-bs-target=".modal-user-logout">
+                <i class="mdi mdi-logout text-muted font-size-16 align-middle me-2"></i>
+                <span class="align-middle">Se déconnecter</span>
+            </a>
+        {% endif %}
+    </div>
+</div>

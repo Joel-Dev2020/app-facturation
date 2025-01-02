@@ -2,7 +2,7 @@
 
 namespace App\IdentityAndAccess\Domain\Exception;
 
-use App\SharedKernel\Domain\Model\Exception\UserFacingError;
+use App\SharedKernel\Domain\Exception\UserFacingError;
 use DomainException;
 
 final class UserNotFoundException extends DomainException implements UserFacingError
@@ -15,6 +15,11 @@ final class UserNotFoundException extends DomainException implements UserFacingE
     public static function withToken(string $token): self
     {
         return new self(sprintf('Aucun utilisateur ne correspond à ce token %s', $token));
+    }
+
+    public static function withTokenExpired(string $token): self
+    {
+        return new self(sprintf('Ce token %s à expiré', $token));
     }
 
     public static function withId(string $id): self

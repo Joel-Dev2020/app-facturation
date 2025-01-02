@@ -1,8 +1,8 @@
-{% extends 'layouts/base.html.twig' %}
+{% extends 'identity_and_access/login/security.html.twig' %}
 
 {% block title %}Se connecter{% endblock %}
 
-{% block body %}
+{% block security %}
     <div class="card">
         <div class="card-body p-4">
             <div class="text-center mt-2">
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="text-center mt-3">
-                        <a href="javascript:"
+                        <a href="{{ path('password.request') }}"
                            class="text-muted text-decoration-underline">
                             Mot de passe oublié ?
                         </a>

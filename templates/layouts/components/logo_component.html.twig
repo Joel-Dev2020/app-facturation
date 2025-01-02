@@ -1,0 +1,21 @@
+{% if param.filename != null %}
+    <span class="logo-lg">
+        <img src="{{ vich_uploader_asset(param, 'imageFile') }}"
+             alt="{{ reglage['app_title'] }}" height="30">
+    </span>
+{% else %}
+    <span class="logo-lg">
+        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="{{ reglage['app_title'] }}" height="30">
+    </span>
+{% endif %}
+
+{% if param.filename2 != null %}
+    <span class="logo-sm">
+        <img src="{{ vich_uploader_asset(param, 'imageFile2') }}"
+             alt="{{ reglage['app_title'] }}" height="26">
+    </span>
+{% else %}
+    <span class="logo-sm">
+        <img src="{{ asset('assets/images/logo-dark-sm.png') }}" alt="{{ reglage['app_title'] }}" height="26">
+    </span>
+{% endif %}

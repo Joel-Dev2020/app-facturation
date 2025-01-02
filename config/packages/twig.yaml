@@ -4,7 +4,7 @@ twig:
     - bootstrap_5_layout.html.twig
 
   globals:
-    reglage_id: '%reglage_id%'
+    params_id: '%params_id%'
     WS: Web symphonie
     WSLINK: https://web-symphonie.com
     reglages: '@App\SharedKernel\Domain\Service\Context\ContextInterface'

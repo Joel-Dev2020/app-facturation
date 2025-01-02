@@ -1,0 +1,16 @@
+<h1>Salut !</h1>
+
+<p>Pour réinitialiser votre mot de passe, veuillez consulter le lien suivant</p>
+
+<a href="{{ url('password.reset', {token: resetToken.passwordResetToken}) }}">
+    {{ url('password.reset', {token: resetToken.passwordResetToken}) }}
+</a>
+
+<p>Ce lien expirera
+    le {{ component('DateComponent', {
+        'date': resetToken.passwordResetExpiresAt,
+        'format': 'short',
+        'formatTime': 'short',
+    }) }}.</p>
+
+<p>A bientôt</p>

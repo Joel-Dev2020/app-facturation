@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\SharedKernel\Presentation\Service\Context;
 
+use App\SharedKernel\Domain\Entity\Parametre\Parametre;
 use App\SharedKernel\Domain\Repository\Parametre\ParametreRepositoryInterface;
 use App\SharedKernel\Domain\Repository\Reglage\ReglageRepositoryInterface;
 use App\SharedKernel\Domain\Service\Context\ContextInterface;
-use App\SharedKernel\Infrastructure\Framework\Symfony\Entity\Parametre\Parametre;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 readonly class ContextService implements ContextInterface
@@ -41,5 +41,13 @@ readonly class ContextService implements ContextInterface
     {
         $id = $this->container->getParameter('params_id');
         return $this->parametresRepository->findParam($id);
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isActiveSub(): ?bool
+    {
+        return false;
     }
 }

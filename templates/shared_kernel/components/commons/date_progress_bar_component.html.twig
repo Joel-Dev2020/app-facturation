@@ -1,0 +1,27 @@
+<div>
+    {% if invoice.isValidate %}
+        {% set color = 'success' %}
+    {% else %}
+        {% if invoice.etatFacture == invoiceConst.validate %}
+            {% set color = 'success' %}
+        {% elseif invoice.etatFacture == invoiceConst.draft %}
+            {% set color = 'primary' %}
+        {% elseif invoice.etatFacture == invoiceConst.cancel %}
+            {% set color = 'danger' %}
+        {% elseif invoice.etatFacture == invoiceConst.pending %}
+            {% set color = 'warning' %}
+        {% endif %}
+    {% endif %}
+
+    {% if displayLabel %}
+        <p>Début : {{ start|date('d/m/Y') }} - Fin : {{ end|date('d/m/Y') }}</p>
+    {% endif %}
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-{{ color }}" role="progressbar"
+             style="width: {{ this.generateProgressBar }}%;"
+             aria-valuenow="{{ this.generateProgressBar }}"
+             aria-valuemin="0"
+             aria-valuemax="100">{{ this.generateProgressBar }}%
+        </div>
+    </div>
+</div>

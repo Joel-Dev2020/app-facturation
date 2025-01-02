@@ -1,0 +1,21 @@
+<div data-simplebar class="sidebar-menu-scroll">
+    <!--- Side menu -->
+    <div id="sidebar-menu">
+        <!-- Left Menu Start -->
+        <ul class="metismenu list-unstyled" id="side-menu">
+            <li class="menu-title" data-key="t-menu">Dashboard</li>
+            <li>
+                <a href="{{ path('app_admin') }}">
+                    <i class="bx bx-home-alt icon nav-icon"></i>
+                    <span class="menu-item" data-key="t-menu">Tableau de bord</span>
+                </a>
+            </li>
+            {# User and Admin Sidebar section #}
+            {{ component('UserSideBarComponent') }}
+
+            {# Only super Admin Sidebar section #}
+            {{ component('SuperAdminSideBarComponent') }}
+        </ul>
+    </div>
+    <!-- Sidebar -->
+</div>

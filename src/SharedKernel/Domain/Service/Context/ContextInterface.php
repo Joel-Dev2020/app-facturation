@@ -9,4 +9,6 @@ interface ContextInterface
     public function findParams(): mixed;
 
     public function getValue(string $name): mixed;
+
+    public function isActiveSub(): ?bool;
 }

@@ -10,7 +10,7 @@ parameters:
   app.sender_email: '%env(MAILER_SENDER_EMAIL)%'
   app.sender_name: '%env(MAILER_SENDER_NAME)%'
   upload_dir: '/uploads'
-  reglage_id: 1
+  params_id: '61929107-c539-11'
   isLocked: false
 
 services:

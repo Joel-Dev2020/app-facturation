@@ -3,6 +3,7 @@
 namespace App\IdentityAndAccess\Infrastructure\Framework\Symfony\Security;
 
 use App\IdentityAndAccess\Domain\Entity\User;
+use App\IdentityAndAccess\Domain\Entity\UserReglage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -11,22 +12,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final readonly class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private function __construct(
-        public string      $id,
-        public string      $organization,
-        public string      $name,
-        public string      $phone,
-        private string     $email,
-        private string     $password,
-        private array      $roles,
-        public bool        $enabled,
-        public bool        $isSuperAdmin,
-        public bool        $isAdmin,
-        public bool        $isUser,
-        public bool        $isStandard,
-        public bool        $isPremium,
-        public ?string     $address = null,
-        private ?self      $owner = null,
-        private Collection $users = new ArrayCollection(),
+        public string       $id,
+        public string       $organization,
+        public string       $name,
+        public string       $phone,
+        private string      $email,
+        private string      $password,
+        private array       $roles,
+        public bool         $enabled,
+        public bool         $isSuperAdmin,
+        public bool         $isAdmin,
+        public bool         $isUser,
+        public bool         $isStandard,
+        public bool         $isPremium,
+        public ?string      $address = null,
+        public ?UserReglage $reglage = null,
+        private ?self       $owner = null,
+        private Collection  $users = new ArrayCollection(),
     )
     {
     }
@@ -48,6 +50,7 @@ final readonly class SecurityUser implements UserInterface, PasswordAuthenticate
             isStandard: $user->isStandard(),
             isPremium: $user->isPremium(),
             address: $user->getAddress(),
+            reglage: $user->getReglage(),
             owner: $user->getOwner(),
             users: $user->getUsers(),
         );

@@ -1,0 +1,15 @@
+{% for message in app.flashes('success') %}
+    <app-flash type="success" message="{{ message }}"></app-flash>
+{% endfor %}
+{% for message in app.flashes('info') %}
+    <app-flash type="info" message="{{ message }}"></app-flash>
+{% endfor %}
+{% for message in app.flashes('question') %}
+    <app-flash type="question" message="{{ message }}"></app-flash>
+{% endfor %}
+{% for message in app.flashes('warning') %}
+    <app-flash type="warning" message="{{ message }}"></app-flash>
+{% endfor %}
+{% for message in app.flashes('danger') %}
+    <app-flash type="error" message="{{ message }}"></app-flash>
+{% endfor %}

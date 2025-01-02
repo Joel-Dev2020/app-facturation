@@ -1,0 +1,10 @@
+{% set badge = 'badge badge-soft' %}
+{% if isHeader %}
+    {% set badge = 'noti-dot bg' %}
+{% endif %}
+
+{% if this.notificationsCount > 0 %}
+    <span class="{{ badge }}-danger rounded-pill" data-key="t-invoices">{{ this.notificationsCount }}</span>
+{% else %}
+    <span class="{{ badge }}-primary rounded-pill" data-key="t-invoices">{{ this.notificationsCount() }}</span>
+{% endif %}

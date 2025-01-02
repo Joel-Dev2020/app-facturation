@@ -1,0 +1,12 @@
+{% if useDevise %}
+    {% if this.devise is not null %}
+        {% set currencyCode = this.devise.currencyCode %}
+        {% set priceFraction = this.devise.decimalPlace is not null ? this.devise.decimalPlace : 2 %} {# Fraction par défaut : 2 décimales #}
+        {{ this.convertPrice|format_currency(this.devise.currencyCode, {fraction_digit: priceFraction}, locale=app.request.get('_locale')) }}
+    {% else %}
+        {# Afficher un message ou un format par défaut si aucune devise n'est sélectionnée #}
+        <small class="badge bg-info-subtle text-info font-size-10">{{ "Devise non définie" }}</small>
+    {% endif %}
+{% else %}
+    {{ price|format_currency('XOF', {fraction_digit: 0}, locale=app.request.get('_locale')) }}
+{% endif %}

@@ -1,0 +1,11 @@
+import controller_0 from "../ux-autocomplete/controller.js";
+import "tom-select/dist/css/tom-select.default.css";
+import controller_1 from "../ux-chartjs/controller.js";
+import controller_2 from "../ux-live-component/live_controller.js";
+import "../ux-live-component/live.min.css";
+import controller_3 from "../ux-toggle-password/controller.js";
+import "../ux-toggle-password/style.min.css";
+import controller_4 from "../../controllers/hello_controller.js";
+export const eagerControllers = {"symfony--ux-autocomplete--autocomplete": controller_0, "symfony--ux-chartjs--chart": controller_1, "live": controller_2, "symfony--ux-toggle-password--toggle-password": controller_3, "hello": controller_4};
+export const lazyControllers = {"csrf-protection": () => import("../../controllers/csrf_protection_controller.js")};
+export const isApplicationDebug = true;

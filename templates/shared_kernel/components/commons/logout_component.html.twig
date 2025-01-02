@@ -1,0 +1,38 @@
+<div class="modal fade modal-user-logout" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-size-14" id="myExtraLargeModalLabel">{{ title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="p-2 text-center">
+                    <div class="avatar-sm mx-auto">
+                        <div class="avatar-title bg-light text-primary h4 rounded-circle">
+                            <i class="bx bxs-user"></i>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <span>Voulez-vous vous déconnecter ?</span>
+                        <p class="text-muted font-size-12">
+                            Merci d'avoir utilisé <span class="fw-semibold text-body">{{ title }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn btn-light btn-sm btn-rounded me-1" data-bs-dismiss="modal">
+                            <i class="bx bx-x me-1"></i> Annuler
+                        </button>
+                        <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm btn-rounded">
+                            <i class="bx bx-edit me-1"></i> Se déconnecter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>

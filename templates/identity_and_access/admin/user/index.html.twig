@@ -1,0 +1,163 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2 justify-content-between">
+                        <h5 class="card-title">{{ title }}</h5>
+                        <div>
+                            {% if permission.canList(app.user) %}
+                                <a href="javascript:" data-bs-toggle="modal"
+                                   data-bs-target=".users-modal-filter"
+                                   class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 me-2">
+                                    <i class="mdi mdi-filter me-1"></i> Filter
+                                </a>
+                                {{ component('UserFilterComponent', {
+                                    'form': form,
+                                    'title': 'Filtre des utilisateurs',
+                                    'id': 'users-modal-filter',
+                                }) }}
+                            {% endif %}
+                            {% if permission.canCreate(app.user) %}
+                                <a href="{{ path('admin.users.create') }}"
+                                   class="btn btn-success btn-sm btn-rounded waves-effect waves-light mb-2 me-2">
+                                    <i class="mdi mdi-plus me-1"></i> Ajouter un utilisateur
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mt-5">
+                        <table class="table table-centered table-sm">
+                            <thead>
+                            <tr>
+                                <th>Raison sociale</th>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Rôle</th>
+                                <th>Téléphone</th>
+                                <th>Status</th>
+                                <th class="d-flex justify-content-center align-items-center">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in users %}
+                                {% set roleBadge = 'default' %}
+                                {% set roleLabel = '' %}
+                                {% if user.superAdmin %}
+                                    {% set roleBadge = 'success' %}
+                                    {% set roleLabel = 'ROLE_SUPER_ADMIN' %}
+                                {% elseif user.admin %}
+                                    {% set roleBadge = 'primary' %}
+                                    {% set roleLabel = 'ROLE_ADMIN' %}
+                                {% else %}
+                                    {% set roleBadge = 'info' %}
+                                    {% set roleLabel = 'ROLE_USER' %}
+                                {% endif %}
+                                <tr>
+                                    <td data-label="Raison sociale">
+                                        <a href="javascript:" data-bs-toggle="modal"
+                                           data-bs-target=".edit-user-{{ user.id }}">
+                                            <small>{{ user.organization }}</small>
+                                        </a>
+                                    </td>
+                                    <td data-label="Nom" class="fw-semibold">
+                                        <a href="javascript:" data-bs-toggle="modal"
+                                           data-bs-target=".edit-user-{{ user.id }}">
+                                            <small>{{ user.name }}</small>
+                                        </a>
+                                    </td>
+                                    <td data-label="Email">
+                                        <a href="javascript:" data-bs-toggle="modal"
+                                           data-bs-target=".edit-user-{{ user.id }}">
+                                            <small>{{ user.email }}</small>
+                                        </a>
+                                    </td>
+                                    <td data-label="Rôle">
+                                        <span class="badge bg-{{ roleBadge }}-subtle text-{{ roleBadge }} font-size-12">
+                                            <small>{{ user.roleLabel(roleLabel) }}</small>
+                                        </span>
+                                    </td>
+                                    <td data-label="Téléphone">
+                                        {% if user.phone != null %}
+                                            <small>{{ user.phone }}</small>
+                                        {% else %}
+                                            {{ component('DefaultDataComponent') }}
+                                        {% endif %}
+                                    </td>
+                                    <td data-label="Status">
+                                        <small>
+                                            {{ component('BooleanComponent', {
+                                                'action': user.enabled,
+                                                'labelTrue': 'Actif',
+                                                'labelFalse': 'Inactif',
+                                            }) }}
+                                        </small>
+                                    </td>
+                                    <td data-label="Action" class="d-flex justify-content-center align-items-center">
+                                        <div class="dropdown">
+                                            <a class="text-muted dropdown-toggle font-size-18" role="button"
+                                               data-bs-toggle="dropdown" aria-haspopup="true">
+                                                <i class="mdi mdi-dots-horizontal"></i>
+                                            </a>
+                                            {% if permission.canEdit(app.user) or permission.canView(app.user) or permission.canDelete(app.user) %}
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    {% if permission.canEdit(app.user) %}
+                                                        <a class="dropdown-item"
+                                                           href="{{ path('admin.users.update', {'id': user.id}) }}">
+                                                            Modifier
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if permission.canView(app.user) %}
+                                                        <a class="dropdown-item"
+                                                           href="{{ path('admin.users.view', {'id': user.id}) }}">
+                                                            Détails
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if permission.canDelete(app.user) and app.user.id != user.id %}
+                                                        <a class="dropdown-item text-danger" href="javascript:"
+                                                           data-bs-toggle="modal"
+                                                           data-bs-target=".delete-user-{{ user.id }}">
+                                                            Supprimer
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="7">{{ component('EmptyComponent') }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {% if users.totalItemCount > search.limit %}
+                    <div class="card-footer">
+                        {{ knp_pagination_render(users) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+    {% for user in users %}
+        {% if permission.canDelete(app.user) and app.user.id != user.id %}
+            {{ component('DeleteFormComponent', {
+                'confirmText': "Voulez vous supprimer cet utilisateur ?",
+                'label': "Supprimer l'utilisateur",
+                'classId': 'delete-user-'~user.id,
+                'id': user.id,
+                'urlPath': path('admin.users.delete', {'id': user.id}),
+            }) }}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

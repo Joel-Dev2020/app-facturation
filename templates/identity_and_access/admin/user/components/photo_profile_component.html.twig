@@ -1,0 +1,11 @@
+{# {% if user is not null and  user.profile is not null and user.profile.photo is not null %}
+    <img class="rounded-circle header-profile-user" src="{{ vich_uploader_asset(user.profile, 'imageFile') }}"
+         alt="{{ app.user.fullname }}">
+{% else %}
+    <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/avatar.png') }}"
+         alt="{{ user.fullname }}">
+{% endif %} #}
+<img class="rounded-circle header-profile-user"
+     src="{{ asset('assets/images/avatar.png') }}"
+     alt="{{ app.user.name }}"
+>

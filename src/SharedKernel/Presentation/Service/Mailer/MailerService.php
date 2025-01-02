@@ -21,14 +21,21 @@ readonly class MailerService implements MailerServiceInterface
     {
     }
 
-    public function send(string $to, string $subject, ?string $body = null, ?string $template = null): void
+    public function send(
+        string  $to,
+        string  $subject,
+        ?string $body = null,
+        ?string $template = null,
+        ?array  $data = []
+    ): void
     {
         $email = new TemplatedEmail();
         $email->from(new Address($this->senderEmail, $this->senderName))
             ->to(new Address($to, $subject))
-            ->subject($subject);
+            ->subject($subject)
+            ->context($data);
         if ($body) {
-            $email->text($body);
+            $email->html($body);
         } else {
             $email->htmlTemplate($template);
         }

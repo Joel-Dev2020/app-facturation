@@ -1,0 +1,17 @@
+{% set TotalLabel = 'Total TTC:' %}
+
+{% if tva == 0 and remise == 0 %}
+    {# Aucun TVA ni remise #}
+    {% set TotalLabel = 'Total:' %}
+{% elseif tva > 0 and remise == 0 %}
+    {# TVA seulement #}
+    {% set TotalLabel = 'Total TTC:' %}
+{% elseif tva == 0 and remise > 0 %}
+    {# Remise seulement #}
+    {% set TotalLabel = 'Total:' %}
+{% elseif tva > 0 and remise > 0 %}
+    {# TVA et remise #}
+    {% set TotalLabel = 'Total TTC:' %}
+{% endif %}
+
+{{ TotalLabel }}
